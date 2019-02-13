@@ -9,18 +9,21 @@ export const CallApi = () => {
   const callApi = async () => {
     setLoading(true);
 
-    const api = new ValuesApi({
-      basePath: "https://localhost:5001",
-      apiKey: `Bearer ${token}`
-    });
-    const result = await api.get(); // try catch would be smart here
-
+    try {
+      const api = new ValuesApi({
+        basePath: "https://localhost:5001",
+        apiKey: `Bearer ${token}`
+      });
+      const result = await api.get();
+      setResult(JSON.stringify(result));
+    } catch (ex) {
+      setResult(ex.statusText);
+    }
     setLoading(false);
-    setResult(JSON.stringify(result));
   };
 
   return (
-    <div style={{ flex: 1 }}>
+    <div>
       <h2>Authenticated API</h2>
       <input
         type="text"

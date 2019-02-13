@@ -81,6 +81,26 @@ export class RequiredError extends Error {
 /**
  * 
  * @export
+ * @interface RefreshTokenRequest
+ */
+export interface RefreshTokenRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof RefreshTokenRequest
+     */
+    oldJwtToken?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RefreshTokenRequest
+     */
+    refreshToken?: string;
+}
+
+/**
+ * 
+ * @export
  * @interface User
  */
 export interface User {
@@ -102,6 +122,12 @@ export interface User {
      * @memberof User
      */
     credentials?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof User
+     */
+    deactivated?: boolean;
 }
 
 /**
@@ -134,6 +160,12 @@ export interface UserCreate {
      * @memberof UserCreate
      */
     credentials?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserCreate
+     */
+    deactivated?: boolean;
 }
 
 /**
@@ -148,6 +180,18 @@ export interface UserLogin {
      * @memberof UserLogin
      */
     jwtToken?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserLogin
+     */
+    refreshToken?: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UserLogin
+     */
+    expirationDate?: Date;
     /**
      * 
      * @type {number}
@@ -166,6 +210,12 @@ export interface UserLogin {
      * @memberof UserLogin
      */
     credentials?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserLogin
+     */
+    deactivated?: boolean;
 }
 
 /**
@@ -223,6 +273,41 @@ export const UsersApiFetchParamCreator = function (configuration?: Configuration
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
             const needsSerialization = (<any>"UserCreate" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(data || {}) : (data || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {RefreshTokenRequest} [data] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refreshLogin(data?: RefreshTokenRequest, options: any = {}): FetchArgs {
+            const localVarPath = `/api/Users/RefreshLogin`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("Authorization")
+					: configuration.apiKey;
+                localVarHeaderParameter["Authorization"] = localVarApiKeyValue;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"RefreshTokenRequest" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(data || {}) : (data || "");
 
             return {
@@ -294,6 +379,24 @@ export const UsersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {RefreshTokenRequest} [data] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refreshLogin(data?: RefreshTokenRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserLogin> {
+            const localVarFetchArgs = UsersApiFetchParamCreator(configuration).refreshLogin(data, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {UserSignin} [data] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -330,6 +433,15 @@ export const UsersApiFactory = function (configuration?: Configuration, fetch?: 
         },
         /**
          * 
+         * @param {RefreshTokenRequest} [data] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refreshLogin(data?: RefreshTokenRequest, options?: any) {
+            return UsersApiFp(configuration).refreshLogin(data, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {UserSignin} [data] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -356,6 +468,17 @@ export class UsersApi extends BaseAPI {
      */
     public addUser(data?: UserCreate, options?: any) {
         return UsersApiFp(this.configuration).addUser(data, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {RefreshTokenRequest} [data] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public refreshLogin(data?: RefreshTokenRequest, options?: any) {
+        return UsersApiFp(this.configuration).refreshLogin(data, options)(this.fetch, this.basePath);
     }
 
     /**

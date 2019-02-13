@@ -12,5 +12,7 @@ namespace Webservice.Database.Models
         public string EmailAddress { get; set; }
 
         public byte[] Credentials { get; set; }
+
+        public bool Deactivated { get; set; }
     }
 }

@@ -24,7 +24,7 @@ export const CreateUser = () => {
   };
 
   return (
-    <div style={{ flex: 1 }}>
+    <div>
       <h2>Create user</h2>
       <input
         type="text"

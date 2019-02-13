@@ -5,18 +5,15 @@ import { SignInUser } from "./Components/SigninUser";
 import { CallApi } from "./Components/CallApi";
 import { UserInfo } from "./Components/UserInfo";
 import { withLogin } from "./Contexts/login/loginWrapper";
+import { RefreshToken } from "./Components/RefreshToken";
 
 const App = () => (
   <React.Fragment>
-    <div style={{ display: "flex" }}>
-      {/*never ever do inline styles*/}
+    <div style={{ wordBreak: "break-all" }}>
       <CreateUser />
-      <div style={{ flex: 1 }}>
-        <SignInUser />
-      </div>
-      <div style={{ flex: 1 }}>
-        <CallApi />
-      </div>
+      <SignInUser />
+      <CallApi />
+      <RefreshToken />
     </div>
     <UserInfo />
   </React.Fragment>

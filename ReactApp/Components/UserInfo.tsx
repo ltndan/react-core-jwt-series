@@ -3,11 +3,18 @@ import { LoginContext } from "../Contexts/login/loginContext";
 
 export const UserInfo = () => {
   const loginContext = useContext(LoginContext);
-
-  return (
-    <div style={{ margin: "30px auto", textAlign: "center" }}>
-      User email:{" "}
-      {loginContext.login ? loginContext.login.emailAddress : "not logged in"}
-    </div>
-  );
+  if (loginContext.login) {
+    return (
+      <div>
+        <h2>Current User info</h2>
+        User email: {loginContext.login.emailAddress}
+        <br />
+        <div>
+          Token expires at <span>{loginContext.login.expirationDate}</span>
+        </div>
+      </div>
+    );
+  } else {
+    return <div />;
+  }
 };

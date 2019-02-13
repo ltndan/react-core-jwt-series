@@ -27,7 +27,7 @@ export const SignInUser = () => {
   };
 
   return (
-    <div style={{ flex: 1 }}>
+    <div>
       <h2>Signin user</h2>
       <input
         type="text"

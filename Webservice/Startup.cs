@@ -42,7 +42,7 @@ namespace Webservice
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "react-core-jwt", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "react-core-jwt-series", Version = "v1" });
                 var security = new Dictionary<string, IEnumerable<string>>
                 {
                     {"Bearer", new string[] { }}

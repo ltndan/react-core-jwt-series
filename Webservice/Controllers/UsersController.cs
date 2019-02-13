@@ -1,11 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Webservice.Database.Models;
 using Webservice.Interfaces;
@@ -17,15 +10,11 @@ namespace Webservice.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly ILogger<UsersController> _logger;
         private readonly IUserService _userService;
-        private readonly IConfiguration _configuration;
 
-        public UsersController(ILogger<UsersController> logger, IUserService userService, IConfiguration configuration)
+        public UsersController(IUserService userService)
         {
-            _logger = logger;
             _userService = userService;
-            _configuration = configuration;
         }
 
         [HttpPost]
@@ -39,34 +28,25 @@ namespace Webservice.Controllers
         [HttpPost]
         public async Task<ActionResult<UserLogin>> SignInUser(UserSignin data)
         {
-            _logger.LogInformation("Signing user in");
-            var user = await _userService.SignInUser(data.EmailAddress, data.Password);
-            if (user != null)
+
+            var login = await _userService.SignInUser(data.EmailAddress, data.Password);
+
+            if (login != null)
             {
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Role, "Some user role"),
-                    new Claim(ClaimTypes.Name, user.EmailAddress),
-                    new Claim("CustomUserIdentifier", user.Id.ToString())
-                };
+                return login;
+            }
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("jwt")["key"]));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+            return Unauthorized();
+        }
 
-                var token = new JwtSecurityToken(
-                    _configuration.GetSection("jwt")["issuer"],
-                    _configuration.GetSection("jwt")["audience"],
-                    claims,
-                    expires: DateTime.Now.AddDays(1),
-                    signingCredentials: creds);
+        [HttpPost]
+        public async Task<ActionResult<UserLogin>> RefreshLogin(RefreshTokenRequest data)
+        {
+            var login = await _userService.RefreshLogin(data.OldJwtToken, data.RefreshToken);
 
-                _logger.LogInformation("Signed user in, sending back his login data");
-                return new UserLogin
-                {
-                    JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
-                    EmailAddress = user.EmailAddress,
-                    Id = user.Id
-                };
+            if (login != null)
+            {
+                return login;
             }
 
             return Unauthorized();
