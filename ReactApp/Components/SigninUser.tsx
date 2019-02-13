@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
-import { UsersApi } from "../Generated/api";
 import { LoginContext } from "../Contexts/login/loginContext";
+import { useWebservice } from "../webservice";
 
 export const SignInUser = () => {
   const [email, setEmail] = useState("");
@@ -8,12 +8,12 @@ export const SignInUser = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const loginContext = useContext(LoginContext);
+  const [usersApi] = useWebservice();
 
   const handleSignin = async () => {
     setLoading(true);
-    const api = new UsersApi({ basePath: "https://localhost:5001" });
     try {
-      const result = await api.signInUser({
+      const result = await usersApi.signInUser({
         emailAddress: email,
         password: password
       });

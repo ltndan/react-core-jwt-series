@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Webservice.Middleware;
 
 namespace Webservice
 {
@@ -100,6 +101,7 @@ namespace Webservice
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseMiddleware<TokenRefresh>();
             app.UseMvc();
 
             app.UseDefaultFiles();
