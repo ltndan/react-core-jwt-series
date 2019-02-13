@@ -6,6 +6,7 @@ import { CallApi } from "./Components/CallApi";
 import { UserInfo } from "./Components/UserInfo";
 import { withLogin } from "./Contexts/login/loginWrapper";
 import { RefreshToken } from "./Components/RefreshToken";
+import { CallAuthentificatedApi } from "./Components/CallAuthentificatedApi";
 
 const App = () => (
   <React.Fragment>
@@ -14,6 +15,7 @@ const App = () => (
       <SignInUser />
       <CallApi />
       <RefreshToken />
+      <CallAuthentificatedApi />
     </div>
     <UserInfo />
   </React.Fragment>

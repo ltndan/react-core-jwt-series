@@ -1,19 +1,19 @@
-﻿using Webservice.Services;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using Webservice.Database;
 using Webservice.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Webservice.Middleware;
+using Webservice.Services;
 
 namespace Webservice
 {
@@ -73,7 +73,8 @@ namespace Webservice
                     ValidIssuer = Configuration.GetSection("jwt")["issuer"],
                     ValidAudience = Configuration.GetSection("jwt")["audience"],
                     IssuerSigningKey =
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("jwt")["key"]))
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("jwt")["key"])),
+                    ClockSkew = TimeSpan.Zero
 
                 };
             });
@@ -101,7 +102,6 @@ namespace Webservice
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseMiddleware<TokenRefresh>();
             app.UseMvc();
 
             app.UseDefaultFiles();

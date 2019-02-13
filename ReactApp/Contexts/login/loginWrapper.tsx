@@ -6,7 +6,15 @@ class LoginWrapper extends React.Component {
   state = {
     login: null,
     setLogin: (login: UserLogin) => {
-      this.setState({ login });
+      var loginWithDate = login;
+      if (loginWithDate) {
+        loginWithDate.expirationDate = loginWithDate.expirationDate
+          ? new Date(loginWithDate.expirationDate.toString())
+          : login.expirationDate;
+      }
+      this.setState({
+        login: loginWithDate
+      });
     }
   };
   render() {

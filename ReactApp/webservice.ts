@@ -17,14 +17,14 @@ export const useWebservice = (): [UsersApi, ValuesApi] => {
     };
 
     if (loginContext.login) {
-      configuration.apiKey = loginContext.login.jwtToken;
+      configuration.apiKey = `Bearer ${loginContext.login.jwtToken}`;
     } else {
       configuration.apiKey = "";
     }
 
     setUsersApi(new UsersApi(configuration));
     setValuesApi(new ValuesApi(configuration));
-  });
+  }, [loginContext.login]);
 
   return [usersApi, valuesApi];
 };

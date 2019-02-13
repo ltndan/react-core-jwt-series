@@ -10,7 +10,8 @@ export const UserInfo = () => {
         User email: {loginContext.login.emailAddress}
         <br />
         <div>
-          Token expires at <span>{loginContext.login.expirationDate}</span>
+          Token expires at{" "}
+          <span>{loginContext.login.expirationDate!.toString()}</span>
         </div>
       </div>
     );
