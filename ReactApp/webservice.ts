@@ -22,8 +22,8 @@ export const useWebservice = (): [UsersApi, ValuesApi] => {
       configuration.apiKey = "";
     }
 
-    setUsersApi(new UsersApi(configuration));
-    setValuesApi(new ValuesApi(configuration));
+    setUsersApi(new UsersApi(configuration, basePath, fetch));
+    setValuesApi(new ValuesApi(configuration, basePath, fetch));
   }, [loginContext.login]);
 
   return [usersApi, valuesApi];

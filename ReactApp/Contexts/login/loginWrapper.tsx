@@ -15,6 +15,10 @@ class LoginWrapper extends React.Component {
       this.setState({
         login: loginWithDate
       });
+    },
+    refreshToken: null,
+    setRefreshToken: refreshToken => {
+      this.setState({ refreshToken });
     }
   };
   render() {

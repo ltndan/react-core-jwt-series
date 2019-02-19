@@ -7,18 +7,22 @@ import { UserInfo } from "./Components/UserInfo";
 import { withLogin } from "./Contexts/login/loginWrapper";
 import { RefreshToken } from "./Components/RefreshToken";
 import { CallAuthentificatedApi } from "./Components/CallAuthentificatedApi";
+import { Counter } from "./Components/Counter";
 
-const App = () => (
-  <React.Fragment>
-    <div style={{ wordBreak: "break-all" }}>
-      <CreateUser />
-      <SignInUser />
-      <CallApi />
-      <RefreshToken />
-      <CallAuthentificatedApi />
-    </div>
-    <UserInfo />
-  </React.Fragment>
-);
+const App = () => {
+  return (
+    <React.Fragment>
+      <div style={{ wordBreak: "break-all" }}>
+        <CreateUser />
+        <SignInUser />
+        <CallApi />
+        <RefreshToken />
+        <CallAuthentificatedApi />
+        <Counter />
+      </div>
+      <UserInfo />
+    </React.Fragment>
+  );
+};
 
 render(withLogin(<App />), document.getElementById("root"));
